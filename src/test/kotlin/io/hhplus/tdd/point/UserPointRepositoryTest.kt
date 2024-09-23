@@ -3,7 +3,7 @@ package io.hhplus.tdd.point
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class PointRepositoryTest {
+class UserPointRepositoryTest {
     private val userPointRepository: UserPointRepository = FakeUserPointRepository()
 
     @Test

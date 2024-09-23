@@ -8,7 +8,9 @@ class UserPointInMemoryRepository(
     private val userPointTable: UserPointTable
 ) : UserPointRepository {
 
-    override fun findByIdOrNull(id: Long): UserPoint = userPointTable.selectById(id)
+    override fun findByIdOrNull(id: Long): UserPoint? =
+        userPointTable.selectById(id).takeIf { it.id != 0L }
+
 
     override fun save(point: UserPoint): UserPoint = userPointTable.insertOrUpdate(point.id, point.point)
 }
