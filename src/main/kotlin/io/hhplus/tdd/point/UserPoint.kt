@@ -1,7 +1,36 @@
 package io.hhplus.tdd.point
 
 data class UserPoint(
-    val id: Long,
-    val point: Long,
-    val updateMillis: Long,
-)
+    val id: Long = 0,
+    val point: Long = 0,
+    val updateMillis: Long = System.currentTimeMillis(),
+) {
+    fun charge(amount: Long): UserPoint {
+        validateAmount(amount)
+
+        return UserPoint(
+            id = this.id,
+            point = this.point + amount,
+        )
+    }
+
+    fun use(amount: Long): UserPoint {
+        validateAmount(amount)
+
+        val usedPoint = this.point - amount
+        if (usedPoint < 0) {
+            throw IllegalStateException("포인트가 부족합니다.")
+        }
+
+        return UserPoint(
+            id = this.id,
+            point = usedPoint,
+        )
+    }
+
+    private fun validateAmount(amount: Long) {
+        if (amount < 0) {
+            throw IllegalArgumentException("음수는 불가능 합니다.")
+        }
+    }
+}
