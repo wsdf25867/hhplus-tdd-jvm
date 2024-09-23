@@ -19,25 +19,27 @@ class PointHistoryRepositoryTest {
     }
 
     @Test
-    fun `id로 PointHistory를 조회시 해당 id에 PointHistory가 없다면 Null 이 나올 수 있다`() {
+    fun `userId로 PointHistory를 조회시 해당 id에 PointHistory가 없다면 빈 리스트를 반환한다`() {
         //given
         //when
-        val found = pointHistoryRepository.findByIdOrNull(1L)
+        val histories = pointHistoryRepository.findAllByUserId(1L)
 
         //then
-        assertThat(found).isNull()
+        assertThat(histories).isEmpty()
     }
 
     @Test
     fun `id로 PointHistory를 조회시 있다면 PointHistory를 반환한다`() {
         //given
-        val pointHistory = PointHistory(id = 1L, type = TransactionType.USE)
+        val pointHistory = PointHistory(id = 1L, userId = 1L, type = TransactionType.USE)
         pointHistoryRepository.save(pointHistory)
 
         //when
-        val found = pointHistoryRepository.findByIdOrNull(1L)!!
+        val histories = pointHistoryRepository.findAllByUserId(1L)
 
         //then
-        assertThat(found.type).isEqualTo(TransactionType.USE)
+        assertThat(histories).hasSize(1)
+        assertThat(histories[0]).extracting("id", "userId", "type")
+            .contains(1L, 1L, TransactionType.USE)
     }
 }
