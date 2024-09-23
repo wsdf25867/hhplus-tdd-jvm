@@ -4,6 +4,13 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class UserPointTest {
+    @Test
+    fun `포인트는 음수로 생성할 수 없다`() {
+        // given // when // then
+        assertThatIllegalArgumentException().isThrownBy {
+            UserPoint(point = -1L)
+        }
+    }
 
     @Test
     fun `포인트 충전시 음수를 입력하면 예외가 발생한다`() {
