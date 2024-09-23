@@ -8,10 +8,7 @@ data class UserPoint(
     fun charge(amount: Long): UserPoint {
         validateAmount(amount)
 
-        return UserPoint(
-            id = this.id,
-            point = this.point + amount,
-        )
+        return copy(point = point + amount)
     }
 
     fun use(amount: Long): UserPoint {
@@ -22,10 +19,7 @@ data class UserPoint(
             throw IllegalStateException("포인트가 부족합니다.")
         }
 
-        return UserPoint(
-            id = this.id,
-            point = usedPoint,
-        )
+        return copy(point = usedPoint)
     }
 
     private fun validateAmount(amount: Long) {
