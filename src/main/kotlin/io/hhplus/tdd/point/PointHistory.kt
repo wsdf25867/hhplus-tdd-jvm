@@ -1,11 +1,11 @@
 package io.hhplus.tdd.point
 
 data class PointHistory(
-    val id: Long,
-    val userId: Long,
+    val id: Long = 0L,
+    val userId: Long = 0L,
     val type: TransactionType,
-    val amount: Long,
-    val timeMillis: Long,
+    val amount: Long = 0L,
+    val timeMillis: Long = System.currentTimeMillis(),
 )
 
 /**
