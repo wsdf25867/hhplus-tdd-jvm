@@ -34,6 +34,30 @@ class UserPointServiceTest {
     }
 
     @Test
+    fun `포인트이력 조회시 없는 user id 빈 리스트를 반환한다`() {
+        // given
+        val userId = 1L
+
+        // when
+        val histories = sut.findHistories(userId)
+
+        // then
+        assertThat(histories).isEmpty()
+    }
+
+    @Test
+    fun `포인트이력을 조회할 수 있다`() {
+        // given
+        pointHistoryRepository.save(PointHistory(userId = 1L, type = TransactionType.USE))
+
+        // when
+        val histories = sut.findHistories(1L)
+
+        // then
+        assertThat(histories).isNotEmpty
+    }
+
+    @Test
     fun `포인트 충전시 없는 UserPoint id 라면 예외가 발생한다`() {
         // given
         val userId = 1L
