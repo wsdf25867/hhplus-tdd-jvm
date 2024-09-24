@@ -39,4 +39,7 @@ class UserPointService(
 
         return savedPoint
     }
+
+    fun find(userId: Long): UserPoint = userPointRepository.findByIdOrNull(userId)
+        ?: throw IllegalArgumentException("유효하지 않은 userId: $userId")
 }

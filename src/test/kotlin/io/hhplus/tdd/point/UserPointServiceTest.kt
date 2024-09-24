@@ -10,6 +10,30 @@ class UserPointServiceTest {
     private val sut = UserPointService(userPointRepository, pointHistoryRepository)
 
     @Test
+    fun `포인트 조회시 없는 UserPoint id 라면 예외가 발생한다`() {
+        // given
+        val userId = 1L
+
+        // when // then
+        assertThatIllegalArgumentException().isThrownBy {
+            sut.find(userId)
+        }.withMessageContaining("유효하지 않은")
+    }
+
+    @Test
+    fun `포인트를 조회할 수 있다`() {
+        // given
+        userPointRepository.save(UserPoint(id = 1L))
+
+        // when
+        val userPoint = sut.find(1L)
+
+        // then
+        assertThat(userPoint).extracting("id", "point")
+            .contains(1L, 0L)
+    }
+
+    @Test
     fun `포인트 충전시 없는 UserPoint id 라면 예외가 발생한다`() {
         // given
         val userId = 1L
