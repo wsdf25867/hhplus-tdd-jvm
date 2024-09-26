@@ -32,10 +32,10 @@ class PointControllerTest {
     }
 
     @Test
-    fun `포인트 조회시 유효한 아이디면 UserPoint 반환`() {
+    fun `포인트 조회시 유효한 아이디면 UserPointResponse 반환`() {
         // given
         given(userPointService.find(anyLong()))
-            .willReturn(UserPoint(id = 1L, point = 100L))
+            .willReturn(UserPointResponse(id = 1L, point = 100L))
         val userId = 1
 
         // when // then
@@ -67,8 +67,8 @@ class PointControllerTest {
     fun `포인트 이력 조회시 유효한 아이디면 이력 리스트 반환`() {
         // given
         val histories = listOf(
-            PointHistory(id = 1L, userId = 1L, type = TransactionType.USE),
-            PointHistory(id = 2L, userId = 1L, type = TransactionType.USE)
+            PointHistoryResponse(id = 1L, userId = 1L, type = TransactionType.USE, amount = 0),
+            PointHistoryResponse(id = 2L, userId = 1L, type = TransactionType.USE, amount = 0)
         )
         given(userPointService.findHistories(anyLong()))
             .willReturn(histories)
@@ -112,7 +112,7 @@ class PointControllerTest {
     fun `포인트를 충전하면 충전결과 UserPoint를 반환한다`() {
         // given
         given(userPointService.charge(anyLong(), anyLong()))
-            .willReturn(UserPoint(id = 1L, point = 1L))
+            .willReturn(UserPointResponse(id = 1L, point = 1L))
         val userId = 1L
 
         // when // then
@@ -150,7 +150,7 @@ class PointControllerTest {
     fun `포인트를 사용하면 사용결과 UserPoint를 반환한다`() {
         // given
         given(userPointService.use(anyLong(), anyLong()))
-            .willReturn(UserPoint(id = 1L))
+            .willReturn(UserPointResponse(id = 1L, point = 0L))
         val userId = 1L
 
         // when // then

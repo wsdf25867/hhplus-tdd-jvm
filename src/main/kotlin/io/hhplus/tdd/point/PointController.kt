@@ -17,7 +17,7 @@ class PointController(
     @GetMapping("{id}")
     fun point(
         @PathVariable id: Long,
-    ): UserPoint {
+    ): UserPointResponse {
         return userPointService.find(id)
     }
 
@@ -27,7 +27,7 @@ class PointController(
     @GetMapping("{id}/histories")
     fun history(
         @PathVariable id: Long,
-    ): List<PointHistory> {
+    ): List<PointHistoryResponse> {
         return userPointService.findHistories(id)
     }
 
@@ -38,7 +38,7 @@ class PointController(
     fun charge(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint {
+    ): UserPointResponse {
         return userPointService.charge(id, amount)
     }
 
@@ -49,7 +49,7 @@ class PointController(
     fun use(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint {
+    ): UserPointResponse {
         return userPointService.use(id, amount)
     }
 }
