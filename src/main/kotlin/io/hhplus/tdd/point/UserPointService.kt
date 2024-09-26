@@ -14,9 +14,9 @@ class UserPointService(
     fun charge(userId: Long, amount: Long): UserPoint {
         lock.lock()
         try {
-            val chargedPoint = userPointRepository.findByIdOrNull(userId)
-                ?.charge(amount)
-                ?: throw IllegalArgumentException("유효하지 않은 userId: $userId")
+            val chargedPoint = requireNotNull(userPointRepository.findByIdOrNull(userId)) {
+                "유효하지 않은 userId: $userId"
+            }.charge(amount)
             val savedPoint = userPointRepository.save(chargedPoint)
 
             val pointHistory = PointHistory(
@@ -36,10 +36,10 @@ class UserPointService(
     fun use(userId: Long, amount: Long): UserPoint {
         lock.lock()
         try {
-            val chargedPoint = userPointRepository.findByIdOrNull(userId)
-                ?.use(amount)
-                ?: throw IllegalArgumentException("유효하지 않은 userId: $userId")
-            val savedPoint = userPointRepository.save(chargedPoint)
+            val usedPoint = requireNotNull(userPointRepository.findByIdOrNull(userId)) {
+                "유효하지 않은 userId: $userId"
+            }.use(amount)
+            val savedPoint = userPointRepository.save(usedPoint)
 
             val pointHistory = PointHistory(
                 userId = userId,
@@ -55,8 +55,8 @@ class UserPointService(
 
     }
 
-    fun find(userId: Long): UserPoint = userPointRepository.findByIdOrNull(userId)
-        ?: throw IllegalArgumentException("유효하지 않은 userId: $userId")
+    fun find(userId: Long): UserPoint =
+        requireNotNull(userPointRepository.findByIdOrNull(userId)) { "유효하지 않은 userId: $userId" }
 
     fun findHistories(userId: Long): List<PointHistory> = pointHistoryRepository.findAllByUserId(userId)
 }
