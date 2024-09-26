@@ -9,9 +9,9 @@ class UserPointService(
     private val userPointRepository: UserPointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) {
-    private val lock: Lock = ReentrantLock()
+    private val locks: MutableMap<Long, Lock> = mutableMapOf()
 
-    fun charge(userId: Long, amount: Long): UserPoint = withLock {
+    fun charge(userId: Long, amount: Long): UserPoint = withLock(userId) {
         val userPoint = requireNotNull(userPointRepository.findByIdOrNull(userId)) {
             "유효하지 않은 userId: $userId"
         }.charge(amount)
@@ -24,7 +24,7 @@ class UserPointService(
         userPoint
     }
 
-    fun use(userId: Long, amount: Long): UserPoint = withLock {
+    fun use(userId: Long, amount: Long): UserPoint = withLock(userId) {
         val userPoint = requireNotNull(userPointRepository.findByIdOrNull(userId)) {
             "유효하지 않은 userId: $userId"
         }.use(amount)
@@ -42,7 +42,9 @@ class UserPointService(
 
     fun findHistories(userId: Long): List<PointHistory> = pointHistoryRepository.findAllByUserId(userId)
 
-    private fun <T> withLock(action: () -> T): T {
+    private fun <T> withLock(userId: Long, action: () -> T): T {
+        locks.putIfAbsent(userId, ReentrantLock())
+        val lock = locks[userId] ?: ReentrantLock()
         lock.lock()
         return try {
             action()

@@ -1,18 +1,22 @@
 package io.hhplus.tdd.point.concurrency
 
-import io.hhplus.tdd.point.FakePointHistoryRepository
-import io.hhplus.tdd.point.FakeUserPointRepository
 import io.hhplus.tdd.point.UserPoint
+import io.hhplus.tdd.point.UserPointRepository
 import io.hhplus.tdd.point.UserPointService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.RepeatedTest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
+@SpringBootTest
 class UserPointServiceConcurrencyTest {
 
-    private val userPointRepository = FakeUserPointRepository()
-    private val userPointService: UserPointService = UserPointService(userPointRepository, FakePointHistoryRepository())
+    @Autowired
+    private lateinit var userPointRepository: UserPointRepository
+    @Autowired
+    private lateinit var userPointService: UserPointService
 
     @RepeatedTest(10)
     fun `동시에 100개의 충전 요청이 들어와도 모두 처리한다`() {
