@@ -18,7 +18,7 @@ class UserPointService(
 
         userPointRepository.save(userPoint)
 
-        val pointHistory = PointHistory(userId = userPoint.id, amount = amount, type = TransactionType.CHARGE)
+        val pointHistory = PointHistory.ofCharge(userId = userPoint.id, amount = amount)
         pointHistoryRepository.save(pointHistory)
 
         userPoint
@@ -31,7 +31,7 @@ class UserPointService(
 
         userPointRepository.save(userPoint)
 
-        val pointHistory = PointHistory(userId = userPoint.id, amount = amount, type = TransactionType.USE)
+        val pointHistory = PointHistory.ofUse(userId = userPoint.id, amount = amount)
         pointHistoryRepository.save(pointHistory)
 
         userPoint

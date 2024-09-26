@@ -6,7 +6,18 @@ data class PointHistory(
     val type: TransactionType,
     val amount: Long = 0L,
     val timeMillis: Long = System.currentTimeMillis(),
-)
+) {
+    init {
+        require(amount >= 0) { "음수는 불가능합니다." }
+    }
+    companion object {
+        fun ofCharge(userId: Long, amount: Long) =
+            PointHistory(userId = userId, amount = amount, type = TransactionType.CHARGE)
+
+        fun ofUse(userId: Long, amount: Long) =
+            PointHistory(userId = userId, amount = amount, type = TransactionType.USE)
+    }
+}
 
 /**
  * 포인트 트랜잭션 종류
