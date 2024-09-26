@@ -12,16 +12,15 @@ data class UserPoint(
     fun charge(amount: Long): UserPoint {
         validateAmount(amount)
 
-        return copy(point = point + amount)
+        return copy(point = point + amount, updateMillis = System.currentTimeMillis())
     }
 
     fun use(amount: Long): UserPoint {
         validateAmount(amount)
 
-        val usedPoint = this.point - amount
-        if (usedPoint < 0) throw IllegalStateException("포인트가 부족합니다.")
+        if (point < amount) throw IllegalStateException("포인트가 부족합니다.")
 
-        return copy(point = usedPoint)
+        return copy(point = point - amount, updateMillis = System.currentTimeMillis())
     }
 
     private fun validateAmount(amount: Long) {
