@@ -4,9 +4,8 @@ import io.hhplus.tdd.point.FakePointHistoryRepository
 import io.hhplus.tdd.point.FakeUserPointRepository
 import io.hhplus.tdd.point.UserPoint
 import io.hhplus.tdd.point.UserPointService
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.RepeatedTest
-import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
