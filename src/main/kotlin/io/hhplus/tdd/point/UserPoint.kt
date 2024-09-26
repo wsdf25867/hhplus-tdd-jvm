@@ -18,12 +18,12 @@ data class UserPoint(
     fun use(amount: Long): UserPoint {
         validateAmount(amount)
 
-        if (point < amount) throw IllegalStateException("포인트가 부족합니다.")
+        check(point >= amount) { "포인트가 부족합니다." }
 
         return copy(point = point - amount, updateMillis = System.currentTimeMillis())
     }
 
     private fun validateAmount(amount: Long) {
-        if (amount < 0) throw IllegalArgumentException("음수는 불가능 합니다.")
+        require(amount >= 0) { "음수는 불가능 합니다." }
     }
 }
