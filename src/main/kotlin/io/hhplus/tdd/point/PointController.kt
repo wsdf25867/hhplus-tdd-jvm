@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/point")
-class PointController {
+class PointController(
+    private val userPointService: UserPointService
+) {
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     /**
@@ -15,8 +17,8 @@ class PointController {
     @GetMapping("{id}")
     fun point(
         @PathVariable id: Long,
-    ): UserPoint {
-        return UserPoint(0, 0, 0)
+    ): UserPointResponse {
+        return userPointService.find(id)
     }
 
     /**
@@ -25,8 +27,8 @@ class PointController {
     @GetMapping("{id}/histories")
     fun history(
         @PathVariable id: Long,
-    ): List<PointHistory> {
-        return emptyList()
+    ): List<PointHistoryResponse> {
+        return userPointService.findHistories(id)
     }
 
     /**
@@ -36,8 +38,8 @@ class PointController {
     fun charge(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint {
-        return UserPoint(0, 0, 0)
+    ): UserPointResponse {
+        return userPointService.charge(id, amount)
     }
 
     /**
@@ -47,7 +49,7 @@ class PointController {
     fun use(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint {
-        return UserPoint(0, 0, 0)
+    ): UserPointResponse {
+        return userPointService.use(id, amount)
     }
 }
